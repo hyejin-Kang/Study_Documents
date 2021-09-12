@@ -17,8 +17,8 @@ ___
 >인용구 quote<Br>
 
 <!-- Bullet List -->
-* a<br>
-- b<Br>
+* a
+- b
 
 <!-- Numbered List -->
 Numbers:
