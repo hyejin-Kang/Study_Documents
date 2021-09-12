@@ -1,0 +1,45 @@
+
+public @ResponseBody ResponseEntity<Void> upload(@RequestParam("picture") MultipartFile upfile) {
+
+   if (!upfile.isEmpty()) {
+      String directory = "";
+      String filename = System.currentTimeMillis() + upfile.getOriginalFilename();
+
+      OutputStream out = new FileOutputStream(new File(directory, filename));
+      InputStream in = upfile.getInputStream();
+
+      FileCopyUtils.copy(in, out);
+   
+      숙소서비스.addPicture(filename);
+
+      return new ResponseEntity<>(HttpStatus.OK);
+   } 
+   return new ResponseEntity<>(HttpStatus.BAD_REQUEST)
+      
+}
+
+<div id="#img-box">
+   <img>
+</div>
+
+$("#bt-upload").click(function() {
+
+   var formData = new FormData();
+   var file = $('#upfile')[0].files[0];
+   formData.append('picture', file);
+
+   $.ajax({
+      type: '',
+      url: '',
+      contentType: 'multipart/form-data',
+      //dataType:'json',
+      success:function() {
+         $("#img-box").append("<img />");
+         $("#img-box").find("img:last").attr("src", URL.createObjectURL(file));
+      }, 
+      error: function() {
+         alert("파일 업로드 중 오류가 발생하였습니다.");
+      }
+      
+   })
+})

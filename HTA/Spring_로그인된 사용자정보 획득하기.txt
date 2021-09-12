@@ -1,0 +1,49 @@
+로그인한 사용자 정보 조회하기
+	HttpSession를 요청핸들러 메소드의 매개변수로 정의하기
+		@GetMapping("/my/info")
+		public String userInfo(HttpSession session) {
+			User user = (User) session.getAttribute("LOGINED_USER");
+
+			return "user/info";
+		}
+		* Controller의 요청핸들러 메소드에서만 위의 방식으로 HttpSession객체를 획득할 수 있다.
+
+	RequestContextHolder객체로 HttpSession객체 획득하기
+		@GetMapping("/my/info")
+		public String userInfo() {
+			ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
+			HttpSession session = attributes.getRequest().getSession(create);
+			User user = (User) session.getAttribute("LOGINED_USER")
+		}
+		* 위의 코드만 작성하면 Controller, Service, Dao 등 모든 클래스에서 HttpSession객체를 획득할 수 있다.
+
+	사용자정의 SessionUtils로 HttpSession객체에 저장된 사용자정보 획득하기
+		@GetMapping("/my/info")
+		public String userInfo() {
+			User user = (User) SessionUtils.getAttribute("LOINED_USER");
+		}
+
+		public class OrderService {
+			public List<OrderDto> getMyOrders() {
+				User user = (User) SessionUtils.getAttribute("LOINED_USER");
+				List<OrderDto> orders = orderDao.getOrdersByUserId(user.getId());
+			}
+		}
+		* SessionUtils가 내부적으로 RequestContextHolder 사용하기 때문에,
+		  위의 코드만 작성하면 Controller, Service, Dao 등 모든 클래스에서 로그인된 사용자정보를 획득할 수 있다.
+
+	사용자정의 어노테이션과 ArgumentResolver를 이용해서 HttpSession객체에 저장된 사용자 정보 획득하기
+		@GetMapping("/my/info")
+		public String userInfo(@LoginUser User user) {
+			
+		}
+		* Controller의 요청핸들러 메소드에서만 위의 방식으로 로그인된 사용자정보를 획득할 수 있다.
+
+* 위에 제시된 모든 방법으로 로그인된 사용자정보를 획득할 수 있지만, 로그인된 사용자정보는 컨트롤러의 요청핸들러 메소드에서 획득하자.
+
+
+
+
+
+
+

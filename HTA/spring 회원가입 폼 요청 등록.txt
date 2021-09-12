@@ -1,0 +1,21 @@
+회원가입
+	1. 회원가입 폼 요청하기
+		요청방식: GET
+		요청URL: localhost/spring-mvc/register
+		컨트롤러: HomeController
+		요청핸들러 메소드
+			@GetMapping("/register")
+			public String registerform(){
+				return "form";
+			}
+
+	2. 회원정보 등록 요청하기
+		요청방식: POST
+		요청URL: localhost/spring-mvc/register
+		컨트롤러: HomeController
+		요청핸들러 메소드
+			@PostMapping("/register")
+			public String register(){
+
+				return "redirect:home";	//재요청 URL 응답으로 보내기
+			}

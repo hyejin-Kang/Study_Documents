@@ -1,0 +1,33 @@
+내 장바구니 보기
+	요청방식: GET
+	요청URL: localhost/spring-mvc/product/cart
+
+요청핸들러 메소드 구현
+	@Controller
+	public class ProductController {
+		@Autowired ProductService productService;
+
+		@GetMapping("/cart")
+		public String cart(@LoginUser User user, Model model) {
+			List<Map<String, Object>> items = productService.getMyCartItems(user.getId());
+			model.addAttribute("items", items);
+			return "product/cart";		/WEB-INF/views/product/cart.jsp
+		}
+	}
+데이터베이스 엑세스
+	public interface CartItemDao {
+		List<Map<String, Object>> getCartItemsByUserId(String userId);
+	}
+	carts.xml
+		<select id="getCartItemsByUserId" parameterType="string" resultType="hashmap"> SQL </select>
+비즈니스 로직 구현
+	ProductService 인터페이스
+		List<Map<String, Object>> getMyCartItems(String userId);
+	@Service
+	public class ProductServiceImpl implements ProductService { 구현 클래스
+		@Autowired CartItemDao cartItemDao;
+	
+		public List<Map<String, Object>> getMyCartItems(String userId) {
+			return cartItemDao.getCartItemsByUserId(userId);
+		}
+	}

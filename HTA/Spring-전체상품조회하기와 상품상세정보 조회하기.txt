@@ -1,0 +1,66 @@
+상품 정보 조회하기
+
+1. 전체 상품 조회하기
+	요청방식 : GET
+	요청URL : localhost/spring-mvc/product/list
+	
+	요청핸들러 메소드
+	@GetMapping("/list")	
+	public String products(Model model) {
+		// 전체 상품정보 조회하기
+		List<Product> productList = productService.getAllProducts();
+
+		// 뷰(jsp 페이지)에 조회된 정보 전달하기
+		model.addAttribute("products", productList);
+		
+		// 뷰페이지 이름 반환	prefix				   suffix
+		return "product/list";	"/WEB-INF/views/" + product/list + ".jsp"
+	}
+	// 데이터베이스 엑세스 작업 정의
+	ProductDao
+		List<Product> getAllProducts();
+	products.xml
+		<select id="getAllProducts" resultType="com.sample.vo.Product">
+
+		</select>
+	// 클라이언트의 요청을 처리하기 위한 업무로직 구현
+	ProductService
+		List<Product> getAllProducts();
+	productServiceImple
+		public List<Product> getAllProducts() {
+			return productDao.getAllProducts();
+		}
+
+2. 상품 상세정보 조회하기
+	요청방식 : GET
+	요청URL : localhost/spring-mvc/product/detail?no=100
+
+	요청핸들러 메소드
+	@GetMapping("/detail")
+	public String detail(@RequestParam("no") int productNo, Model model) {
+		logger.info("조회할 상품번호: " + productNo);
+
+		// 상품번호에 해당하는 상품 상품만 조회
+		Product product = productService.getProductDetail(productNo);
+		
+		// 뷰에 조회된 정보 전달하기
+		model.addAttribute("product", product);
+		
+		return "product/detail";  "/WEB-INF/views/" + product/detail + ".jsp"
+	}
+
+	ProductDao
+		Product getProductByNo(int productNo)
+	products.xml
+		<select id="getProductByNo" parameterType="" resultType="">
+
+		</select>
+
+	ProductService
+		Product getProductDetail(int productNo)
+	ProductServiceImpl
+		public Product getProductDetail(int productNo) {
+			// 상품정보에 해당하는 상품정보를 조회해서 반환한다.
+		}
+
+

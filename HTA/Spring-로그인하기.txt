@@ -1,0 +1,48 @@
+사용자 인증하기(로그인하기)
+1. 로그인 폼 요청하기
+	요청방식 : GET
+	요청URL : localhost/spring-mvc/login
+	컨트롤러 : HomeController
+
+	요청핸들러 메소드
+		@GetMapping("/login")
+		public String loginform() {
+			return "loginform";	"/WEB-INF/views/" + loginform + ".jsp"
+		}	
+
+2. 사용자 인증하기(로그인하기)
+	요청방식 : POST
+	요청URL : localhost/spring-mvc/login
+	폼데이터 : id=hong&password=zxcv1234
+	컨트롤러 : HomeController
+
+	요청핸드러 메소드
+		@PostMapping("/login")
+		public String login(@RequestParam("id") String userId, @RequestParam("password") String userPassword) {
+
+		}
+
+		@PostMapping("/login")
+		public String login(String id, String password) {
+
+		}
+
+		@PostMapping("/login")
+		public String login(User user) {
+
+		}
+
+	데이터베이스 엑세스
+		UserDao 인터페이스
+			User getUserById(String userId)		// 이미 선언되어 있음
+		users.xml
+			<select id="getUserById" ...></select>	// 이미 작성되어 있음
+
+	업무로직 구현
+		UserService 인터페이스
+			void login(String userId, String password);
+		UserServiceImpl 구현클래스
+			void login(String userId, String password) {
+				// 사용자 인증처리하기
+			}
+	

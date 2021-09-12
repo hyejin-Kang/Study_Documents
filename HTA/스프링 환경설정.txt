@@ -1,0 +1,31 @@
+스프링 웹개발 세팅
+
+pom.xml : 프로젝트 개발에 필요한 라이브러리 의존성 추가
+	- 마이바티스 설정 : mybatis, mybatis-spring
+	- DB 연결 설정 : commons-dbcp2(커넥션풀 제공), ojdbc8(오라클 jdbc 드라이브), commons-codec(인코딩/디코딩), spring-jdbc(db 엑세스와 트랜잭션 처리를 지원)
+	- 어노테이션 지원 : lombok(롬복) 
+	- 로그 출력 지원 : log4j-api, log4j-core, log4j-jcl, log4j-api, log4j-slf4j-impl
+	- 서블릿 지원 : javax.servlet-api (ex?)
+	- 스프링 코어 라이브러리 : spring-core (ex?)
+	- mvc 패턴 지원 : spring-webmvc
+	- 스프링 컨테이너 제공 : spring-context
+
+web.xml : 컨텍스트, 서블릿 등의 배포 위치를 설정
+	- <web-app /> : xmlns, 서블릿의 버전 등을 지정
+	- <context-param /> : <param-value>의 xml파일에 설정된 스프링 빈을 읽어와 루트 스프링 컨테이너를 생성한다(by ContextLoaderListener)
+	- <listener /> : 사용자의 요청을 controller로 보내기 위한 설정. 톰캣 시작 시 ContextLoaderListener를 가져옴
+	- <servlet /> : servlet 선언할 떄 사용, 스프링에선 DispatcherServlet 선언 시 주로 사용
+	- <servlet-mapping /> :  servlet과 url 사이의 매핑을 정의 함
+	- <jsp-config /> / <jsp-property-group /> /<url-pattern />, <include-prelude /> : View(?, jsp등)에서 공통으로 사용되는 태그 라이브러리 설정을 include하기 위한 태그
+
+======webapp======
+context-root.xml : 루트 스프링 컨테이너 설정
+	- 서비스 컴포넌트를 스캔하여 빈으로 등록
+	- 커넥션 풀, 트랜잭션 매니저, sqlSessionFactory 빈 등록
+	- mybatis-spring태그를 활용해 mapper인터페이스를 스캔해서 구현객체를 생성하고 빈으로 등록
+
+context-web.xml : child 스프링 컨테이너 설정, 컨트롤러를 통해 jsp와 연결하기 위한 설정들을 함
+	- 컨트롤러 컴포넌트를 스캔하여 빈으로 등록
+	- spring mvc 관련 어노테이션을 분석하고, 활용할 수 있게 함
+	- 정적자원을 매핑(이미지, CSS, javascript 소스)
+	- veiwResolver 빈 등록

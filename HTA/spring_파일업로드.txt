@@ -1,0 +1,50 @@
+스프링에서 파일 업로드 구현하기
+1. 의존성 추가
+	<depoendency>
+		<groupId>commons-fileupload</groupId>
+		<artifactId>commons-fileupload</artifactId>
+		<version>1.4</version>
+	</dependency>
+
+2. context-web.xml에 MultipartResolver 빈 등록
+	<bean id="multipartResolver"
+		class="org.springframework.web.multipart.commons.CommonsMultipartResolver"></bean>
+	* CommonsMultipartResolver 는 Apache commons-fileupload 라이브러리를 사용해서 첨부파일 업로드를 지원한다.
+	(업로드된 파일은 톰캣의 temp폴더에 저장)
+	
+
+	+ MultipartResolver는 멀티파트요청(첨부파일이 포함된 요청)에 대한 처리를 지원하는 객체다.
+	+ 멀티파트요청
+		+ <form method="post" action-"add" encdtype="multipart/form-data">
+			파일설명 <textarea name-"description"></textarea>
+		   </form>
+		+ form태그의 enctype 속성의 값이 "multipart/form-data"로 지정되어 있는 경우
+		+ 멀티파트요청인 경우 요청객체에서 요청파라미터와 업로드된 첨부파일 정보 조회하기와 첨부파일에 대한
+		   처리가 필요하다.
+	+ MultipartResolver는 요청객체에서 요청파라미터값을 조회해서 요청핸들러 메소드에 전달한다.
+	+ MultipartResolver는 첨부파일에 대한 정보를 MultipartFile 객체에 담아서 요청 핸들러 메소드에 전달한다.
+
+3. 첨부파일이 포함된 등록 폼 제작하기
+	+단일 파일 업로드 폼
+		<form method="post" action="register" enctype="multipart/form-data">
+			첨부파일 <input type="file" name ="photofile" />
+			파일설명 <textarea rows="2" name="description"></textarea>
+			<button type="submit">등록</button>
+		</form>
+		@PostMapping("/register")
+		public String register(@RequestParam("photofile") MultipartFile photofile, @RequestParam("description") String description){
+			...
+		}
+	
+	+ 하나 이상의 파일 업로드 폼
+		<form method="post" action="register" enctype="multipart/form-data">
+			첨부파일 <input type="file" name="photofiles" />
+			첨부파일 <input type="file" name="photofiles" />
+			첨부파일 <input type="file" name="photofiles" />
+			파일설명 <textarea rows="2" name="description"></textarea>
+			<button type="submit"> 등록 </button>
+		</form>
+		@PostMapping("/register")
+		public String register(@RequestParam("photofiles") List<MultipartFile> photofiles, @RequestParam("description") String description){
+			...
+		}

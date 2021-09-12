@@ -1,0 +1,42 @@
+사용자정의 어노테이션과 HandlerMethodArgumentResolver
+	1. 사용자정의 어노테이션 정의하기
+		@Retention(RetentionPolicy.RUNTIME)
+		@Target(ElementType.PARAMETER)
+		public @interface LoginUser{
+
+		}
+
+	2. 어노테이션 사용하기
+		@GetMapping("/my/reviewList")
+		public String myReviews(@LoginUser User user){
+		
+		}
+		@GetMapping("/product/addCart")
+		public String addCartItem(@RequestParam("no") int productNo, @LoginUser User user){
+
+		}
+		@GetMapping("/order/add")
+		public String addOrder(OrderForm orderForm, @LoginUser User user){
+		
+		}
+
+	3. 위와 같이 어노테이션을 사용했을 때 요청핸들러의 매개변수를 분석해서 로그인된 사용자정보를 전달하는 사용자정의 HandlerMethodArgumentResolver 구현하기
+		
+		public class LoginUserArgumentResolver implements HandlerMethodArgumentResolver {
+	
+			public boolean supportsParameter(MethodParameter parameter){
+				return Objects. nonNull(parameter.getParameterAnnotation(LoginUser.class));
+			}
+		
+			public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer,
+			         NativeWebRequest webRequest, WebDataBinaryFactory binderFactory) throws Exception {
+			         return SessionUtils.getAttribute("LOGINED_USER");
+			}
+		}
+
+	4. 스프링 빈 설정파일에 사용자정의 HandlerMethodArgumentResolver를 등록한다	(사용자정의가 많으면 어떻게 구분??)
+		<mvc:annotation-driven>
+			<mvc:argument-resolvers>
+				<bean class="com.sample.web.argumentResolver.LoginUserArgumentResolver"></bean>
+			</mvc:argument-resolvers>
+		</mvc:annotation-driven>

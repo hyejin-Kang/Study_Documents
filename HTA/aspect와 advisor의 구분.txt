@@ -1,0 +1,25 @@
+##### Spring AOP설정을 이용해서 로그를 출력하는 공통기능을 서비스클래스의 모든 메소드가 실행되기 전에 실행되도록 설정함 
+<!-- advice -->
+<bean id="loggingAdvice" class="loggingAdvice" ></bean>
+
+<aop:config>
+	<!-- pointcut -->
+	<aop:pointcut expression="within(com.sample.service.*Service)"
+			id="targetPointcut" />
+	<!-- aspect = pointcut + advice, aop의 적용단위 -->
+	<aop:aspect ref="loggingAdvice">
+		<aop:before method="logging" pointcut-ref="targetPointcut">
+	</aop>
+</aop:config>
+
+##### Spring AOP설정을 이용해서 트랜잭션처리를 지원하는 공통기능을 서비스 클래스의 모든 메소드에 적용되도록 설정함
+<!-- advice -->
+<tx:advice id="txAdvice" transaction-manager="transactionManager">
+
+<aop:config>
+	<!-- pointcut -->
+	<aop:pointcut expression="within(com.sample.service.*Service)"
+			id="txPointcut" />
+	<!-- advisor = pointcut + advice -->
+	<tx:advisor advice-ref="txAdvice" pointcur-ref="txPointcut"/>
+</aop:config>

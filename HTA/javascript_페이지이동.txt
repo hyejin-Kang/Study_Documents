@@ -1,0 +1,4 @@
+location.href="이동할 페이지 주소"
+location.reload();
+history.back();
+history.forward();

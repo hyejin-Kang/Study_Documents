@@ -1,0 +1,18 @@
+스프링 프로젝트 생성
+	- eGovFrame
+		* 필요한 라이브러리들이 대부분 pom.xml에 등록되어 있음
+		* 오라클 JDBC 드라이브만 등록하면 된다.
+		* 불필요한 설정이나 라이브러리들도 추가된다. (전자정보표준프레임워크 관련 설정 및 라이브러리들)
+		1. eGov Core Project
+		- webapp가 없다.
+		- packaging이 jar로 된다.
+		
+		2. eGov Web Project
+		- war로 만들어짐
+		
+		3. maven 프로젝트로 생성하기
+		- create simple project 체크 후 next
+		- group id 작성
+		- artifact id -> 보통 프로젝트명 작성	
+		- packaging을 war로 선택하고 finish
+		- maven update 후 타겟런타임에서 톰캣 추가
